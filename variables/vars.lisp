@@ -1,13 +1,13 @@
 (+ 1 1)
 
-(first (list #'(lambda() 1)))
+(funcall (first (list #'(lambda() 1))))
 
-(third 
-  (let ((count 0))
-    (list
-      #'(lambda () (incf count))
-      #'(lambda () (decf count))
-      #'(lambda () count)))) ; => Still dont know how to invoke these ...
+(funcall (third 
+             (let ((count 0))
+                 (list
+                  #'(lambda () (incf count))
+                  #'(lambda () (decf count))
+                  #'(lambda () count))))) ; => Still dont know how to invoke these ...
 
 (defvar *x* 10)
 (defun foo () (format t "X: ~d~%" *x*))
@@ -58,7 +58,7 @@
 ;;; Before assignment X: 12
 ;;; After assignment  X: 13
 ;;; Before assignment X: 20
-;;; After assignment  X: 21
+;;;r After assignment  X: 21
 ;;; Before assignment X: 13
 ;;; After assignment  X: 14
 ;;; NIL
