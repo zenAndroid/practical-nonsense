@@ -48,3 +48,17 @@
 ;;; X: 10
 ;;; NIL
 ;;; CL-USER(15)
+
+(defun foo ()  
+  (format t "Before assignment~18tX: ~d~%" *x*)  
+  (setf *x* (+ 1 *x*))  
+  (format t "After assignment~18tX: ~d~%" *x*))
+
+;; bar
+;;; Before assignment X: 12
+;;; After assignment  X: 13
+;;; Before assignment X: 20
+;;; After assignment  X: 21
+;;; Before assignment X: 13
+;;; After assignment  X: 14
+;;; NIL
