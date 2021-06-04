@@ -95,3 +95,16 @@
 
 
 Chapter 8 starts here ! 
+
+;; (defmacro macro-name (parameters*)
+;;   "Optional doc-string"
+;;   body-form*)
+
+(defun primep (number)
+  (when (> number 1)
+    (loop for i from 2 to (isqrt number) never (zerop (mod number i)))))
+
+;; It is a prime predicate
+
+(defun next-prime (number)
+  (loop for n from number when (primep n) return n))
