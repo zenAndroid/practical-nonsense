@@ -1,8 +1,8 @@
-(+ 1 1)
+;; (+ 1 1)
 
-(mapcar #'string-upcase (list "hello" "world"))
+;; (mapcar #'string-upcase (list "hello" "world"))
 
-(dolist (x '(1 2 3)) (print x))
+;; (dolist (x '(1 2 3)) (print x))
 ;;;   (dolist (x '(1 2 3)) (print x))
 ;;;
 ;;;   1
@@ -12,15 +12,15 @@
 ;;;   CL-USER >
 
 
-(dolist (x '(1 2 3)) (print x) (if (evenp x) (return)))
+;; (dolist (x '(1 2 3)) (print x) (if (evenp x) (return)))
 ;;  1
 ;;  2
 
-(dotimes (i 10) (print i))
+;; (dotimes (i 10) (print i))
 
-(dotimes (i 20)
-  (dotimes (j 20)
-    (format t "~dx~d=~3d~%" (+ 1 i) (+ 1 j) (* (+ 1 i) (+ 1 j)))))
+;; (dotimes (i 20)
+;;   (dotimes (j 20)
+;;     (format t "~dx~d=~3d~%" (+ 1 i) (+ 1 j) (* (+ 1 i) (+ 1 j)))))
 
 ;; Output is as expected
 ;; 19x8=152
@@ -70,15 +70,15 @@
 ;;; 55
 
 
-(loop for i from 1 to 20 collecting i)
+;; (loop for i from 1 to 20 collecting i)
 
-(defun foob (strong)
-  "Counts the vowels in the argument string uwu"
-  (loop for x across strong
-        counting (find x "aeoui")))
+;; (defun foob (strong)
+;;   "Counts the vowels in the argument string uwu"
+;;   (loop for x across strong
+;;         counting (find x "aeoui")))
 
 
-(foob "zenAndroid is enjoying this book, but damn does he find this CL thing ugly ...")
+;; (foob "zenAndroid is enjoying this book, but damn does he find this CL thing ugly ...")
 
 ;; Returns 19 ...
 
@@ -100,35 +100,137 @@
 ;;   "Optional doc-string"
 ;;   body-form*)
 
-(defun primep (number)
-  (when (> number 1)
-    (loop for i from 2 to (isqrt number) never (zerop (mod number i)))))
+;; (defun primep (number)
+;;   (when (> number 1)
+;;     (loop for i from 2 to (isqrt number) never (zerop (mod number i)))))
 
 ;; It is a prime predicate
 
-(defun next-prime (number)
-  (loop for n from number when (primep n) return n))
+;; (defun next-prime (number)
+;;   (loop for n from number when (primep n) return n))
 
-(defmacro do-primes ((var start end) &body body)
-  `(do ((,var (next-prime ,start) (next-prime (+ 1 ,var))))
-       ((> ,var ,end)) ; This condition is tested, and when it is true, the looping stops
-     ,@body))
+;; (defmacro do-primes ((var start end) &body body)
+;;   `(do ((,var (next-prime ,start) (next-prime (+ 1 ,var))))
+;;        ((> ,var ,end)) ; This condition is tested, and when it is true, the looping stops
+;;      ,@body))
 
 
-(do-primes (p 98 542)
-  (format t "~d " p))
+;; (do-primes (p 98 542)
+;;   (format t "~d " p))
 
 ;; I will actually just continue doing the ninth hapter here
 
-(defun report-results (result forms)
+(defun report-result (result form)
   "doc"
-  (format t "~:[FAIL~;pass~] ... ~a~%" result forms)
+  (format t "~:[FAIL~;pass~] ... ~a :: ~a~%" result *test-name* form)
   result)
 
-(defmacro check (&body forms)
-  `(progn
-     ,@(loop for f in forms collect `(report-results ,f ',f))))
+;; (defmacro check (&body forms)
+;;   `(progn
+;;      ,@(loop for f in forms collect `(report-results ,f ',f))))
 
 
 ;; (with-gen ;; oh god am i going to need to redefine this on my own?
 ;;   You'd think that it is available in the standard though? weird
+
+(defmacro with-gensyms ((&rest names) &body body) ;; Here it is
+  `(let ,(loop for n in names collect `(,n (gensym)))
+     ,@body))
+
+(defmacro combine-results (&body forms)
+  (with-gensyms (result)
+    `(let ((,result t))
+      ,@(loop for f in forms collect `(unless ,f (setf ,result nil)))
+       ,result)))
+
+(defmacro check (&body forms)
+  `(combine-results
+    ,@(loop for f in forms collect `(report-result ,f ',f))))
+
+;; (defun test-+ ()
+;;   "Testing the addition function that is built-in to CL"
+;;   (let ((*test-name* 'test-+))
+;;     (check (= (+ 1 2) 3)
+;;       (= (+ 23 23) 46)
+;;       (= (+ 45 32) 77))))
+;; (COMBINE-RESULTS
+;;   (REPORT-RESULT (= (+ 1 2) 3) '(= (+ 1 2) 3))
+;;   (REPORT-RESULT (= (+ 23 23) 46) '(= (+ 23 23) 46))
+;;   (REPORT-RESULT (= (+ 45 32) 77) '(= (+ 45 32) 77)))
+;; This is what that atrocity expands into ...
+;; ... yeah 
+;; (LET ((#:G639 T))
+;;   (IF (REPORT-RESULT (= (+ 1 2) 3) '(= (+ 1 2) 3))
+;;       NIL
+;;       (SETQ #:G639 NIL))
+;;   (IF (REPORT-RESULT (= (+ 23 23) 46) '(= (+ 23 23) 46))
+;;       NIL
+;;       (SETQ #:G639 NIL))
+;;   (IF (REPORT-RESULT (= (+ 45 32) 77) '(= (+ 45 32) 77))
+;;       NIL
+;;       (SETQ #:G639 NIL))
+;;   #:G639)
+;; (test-+)
+;; pass ... (= (+ 1 2) 3)
+;; pass ... (= (+ 23 23) 46)
+;; pass ... (= (+ 45 32) 77)
+;; T
+;; CL-USER>
+
+; (test-+)
+
+;; Make DAMN sure you ankify this stuff
+
+
+;; -------------- How thw fuck is the combine results in the next section working ?????
+
+;; (defun test-* ()
+;;   (let ((*test-name* 'test-*))
+;;     (check
+;;       (= (* 2 2) 4)
+;;       (= (* 3 5) 15))))
+
+(deftest test-arithmetic ()
+  (combine-results
+    (test-+)
+    (test-*)))
+
+(test-arithmetic)
+
+
+;; (LET ((#:G639 T))
+;;   (UNLESS (TEST-+) (SETF #:G639 NIL))
+;;   (UNLESS (TEST-*) (SETF #:G639 NIL))
+;;   #:G639)
+
+;; Question : HOW THE FUCK DOES THAT WORK ?
+;; guess ill macro expand and try to understand
+;; *after macro-expansion*: Hmm, okay i think i had a mistaken understanding of the working of the thing ...
+
+(defvar *test-name* nil)
+
+
+(defmacro deftest (name parameters &body body)
+  "Define a test function. Within a test function we can call
+   other test functions or use 'check' to run individual test
+   cases"
+  `(defun ,name ,parameters
+     ;; (let ((*test-name* ',name))
+     (let ((*test-name* (append *test-name* (list ',name)))) ; Why ? explain
+      ,@body)))
+
+(deftest test-+ ()
+  (check
+    (= (+ 1 2) 3)
+    (= (+ 1 2 3) 6)
+    (= (+ -1 -3) -4)))
+(deftest test-* ()
+  (check
+    (= (* 1 2) 2)
+    (= (* 1 2 3) 6)
+    (= (* -1 -3) 3)))
+
+
+
+
+
