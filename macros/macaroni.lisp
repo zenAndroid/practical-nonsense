@@ -94,7 +94,7 @@
 ;; 55
 
 
-Chapter 8 starts here ! 
+;; Chapter 8 starts here ! 
 
 ;; (defmacro macro-name (parameters*)
 ;;   "Optional doc-string"
@@ -108,3 +108,27 @@ Chapter 8 starts here !
 
 (defun next-prime (number)
   (loop for n from number when (primep n) return n))
+
+(defmacro do-primes ((var start end) &body body)
+  `(do ((,var (next-prime ,start) (next-prime (+ 1 ,var))))
+       ((> ,var ,end)) ; This condition is tested, and when it is true, the looping stops
+     ,@body))
+
+
+(do-primes (p 98 542)
+  (format t "~d " p))
+
+;; I will actually just continue doing the ninth hapter here
+
+(defun report-results (result forms)
+  "doc"
+  (format t "~:[FAIL~;pass~] ... ~a~%" result forms)
+  result)
+
+(defmacro check (&body forms)
+  `(progn
+     ,@(loop for f in forms collect `(report-results ,f ',f))))
+
+
+;; (with-gen ;; oh god am i going to need to redefine this on my own?
+;;   You'd think that it is available in the standard though? weird
