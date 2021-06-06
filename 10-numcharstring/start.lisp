@@ -16,3 +16,40 @@
 
 
 (remove-duplicates '(1 1 1 1 2 23 3 4 5 31  3 2 34 49 0 9 8 8 9))
+
+(defparameter *x* (vector 1 2 3))
+(length *x*)
+(elt *x* 0)
+(elt *x* 1)
+(elt *x* 2)
+(elt *x* 3)
+;; --
+;; (1 23 4 5 31 3 2 34 49 0 8 9)
+;; --
+;; *X*
+;; --
+;; 3
+;; --
+;; 1
+;; --
+;; 2
+;; --
+;; 3
+;; --
+;; #<SB-KERNEL:INDEX-TOO-LARGE-ERROR expected-type: (INTEGER 0 2) datum: 3>
+;; 
+
+(setf (elt *x* 0) 10)
+
+(subseq "abcdefghijklmnopqrstuvwxyz" 13)
+
+(every #'evenp #(1 2 3 4 5))    
+(some #'evenp #(1 2 3 4 5))     
+(notany #'evenp #(1 3 5))   
+(notevery #'evenp #(2 4)) 
+
+(defparameter *h* (make-hash-table))
+
+(gethash 'foo *h*)
+
+(setf (gethash 'foo *h*) 'quux)
