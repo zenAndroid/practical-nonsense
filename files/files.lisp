@@ -3,9 +3,9 @@
 (with-open-file (fDesc "/home/zenandroid/fii.txt" :if-exists :supersede :direction :output)
   (format fDesc "Heeeeeeey"))
 
-(make-pathname :name "foo" :type "txt")
+(make-pathname :directory '(:absolute "foo" "bar") :name "help" :type "txt")
 
-(pprint *DEFAULT-PATHNAME-DEFAULTS*)
+(print *DEFAULT-PATHNAME-DEFAULTS*)
 
 (defun component-present-p (value)
   (and value (not (eql value :unspecific))))
@@ -37,3 +37,7 @@
 
 ;; Gotta be honest mang, this stuff isnt getting in the noggin too much ...
 ;; Too abstract and shit
+
+(merge-pathnames #p"foo/bar.html" #p"/www/html/")
+
+;; It finally clicking, ... nothing better than pen and paper when the confusion strikes ...
