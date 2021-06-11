@@ -10,13 +10,13 @@
 (defun component-present-p (value)
   (and value (not (eql value :unspecific))))
 
-(defun directory-pathname-p  (p)
+(defun directory-pathname-p  (p);{{{
   (and
    (not (component-present-p (pathname-name p)))
    (not (component-present-p (pathname-type p)))
-   p))
+   p));}}}
 
-(defun pathname-as-directory (name)
+(defun pathname-as-directory (name);{{{
   (let ((pathname (pathname name)))
     (when (wild-pathname-p pathname)
       (error "Can't reliably convert wild pathnames."))
@@ -27,16 +27,15 @@
        :name      nil
        :type      nil
        :defaults pathname)
-      pathname)))
+      pathname)));}}}
 
-(defun directory-wildcard (dirname)
+(defun directory-wildcard (dirname);{{{ This basically calls pathname-as-directory, then patches it to conform to CLISP 
+  ; I suppose a more accurate retelling is that it creates a pathname that defaults to the value returned by 
+  ; pathname-as-directory, then monkey-patches the type to conform to CLISP. (idont think im using that word the way its supposed to be used)
   (make-pathname
    :name :wild
    :type #-clisp :wild #+clisp nil
-   :defaults (pathname-as-directory dirname)))
-
-;; Gotta be honest mang, this stuff isnt getting in the noggin too much ...
-;; Too abstract and shit
+   :defaults (pathname-as-directory dirname)));}}}
 
 (merge-pathnames #p"foo/bar.html" #p"/www/html/")
 
