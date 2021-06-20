@@ -13,3 +13,5 @@
  b (print 'b) (if (zerop (random 2)) (go a))
  c (print 'c) (if (zerop (random 2)) (go b)))
 
+(funcall #'+ (values 1 2 3 4 5 6 7 8 9));)
+
