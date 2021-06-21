@@ -1,3 +1,5 @@
+(in-package :zenBoi.pathNames)
+
 (defparameter paname (make-pathname :directory '(:absolute "foo" "bar") :name "help"))
 
 (print *DEFAULT-PATHNAME-DEFAULTS*)

@@ -15,4 +15,4 @@
    minimizing i into min
    finally (return (list min max total evens odds)))
 
-; This is pretty goddamn elegant ... :thinking:
+; ngl This is pretty goddamn elegant ... :thinking:
