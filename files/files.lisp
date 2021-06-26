@@ -124,22 +124,22 @@
            ((funcall test name) (funcall fn name)))))
     (walk (pathname-as-directory dirname)))) ;}}}
 
-(merge-pathnames #p"foo/bar.html" #p"/www/html/")
-
-;; It finally clicking, ... nothing better than pen and paper when the confusion strikes ...
-
-paname ; #P"/foo/bar/help"
-
-(pathname-type (pathname (first (last (pathname-directory paname)))))
-
-(pathname-as-directory paname) ; This helps me understand what is going on this results in #P"/foo/bar/help/"
-
-(directory-pathname-p paname) ; This helps me understand what is going on this results in NIL 
-                              ; (paname's name string is not finished by a slash, and is in file form)
-(append 
-  (or (pathname-directory paname) (list :relative)) ; If the pathname has a directory, it is the result of the OR
-                                                    ; expression, else if it doesnt then the result of the OR 
-                                                    ; expression is the list '(:relative), in this case we get 
-                                                    ; (:ABSOLUTE "foo" "bar") so that is the result
-  (list (file-namestring paname))) ; results in 'help', and that then gets appended to (:ABSOLUTE "foo" "bar")
-                                   ; to yield (:ABSOLUTE "foo" "bar" "help"), this is then the final directory
+;;;; (merge-pathnames #p"foo/bar.html" #p"/www/html/")
+;;;; 
+;;;; ;; It finally clicking, ... nothing better than pen and paper when the confusion strikes ...
+;;;; 
+;;;; paname ; #P"/foo/bar/help"
+;;;; 
+;;;; (pathname-type (pathname (first (last (pathname-directory paname)))))
+;;;; 
+;;;; (pathname-as-directory paname) ; This helps me understand what is going on this results in #P"/foo/bar/help/"
+;;;; 
+;;;; (directory-pathname-p paname) ; This helps me understand what is going on this results in NIL 
+;;;;                               ; (paname's name string is not finished by a slash, and is in file form)
+;;;; (append 
+;;;;   (or (pathname-directory paname) (list :relative)) ; If the pathname has a directory, it is the result of the OR
+;;;;                                                     ; expression, else if it doesnt then the result of the OR 
+;;;;                                                     ; expression is the list '(:relative), in this case we get 
+;;;;                                                     ; (:ABSOLUTE "foo" "bar") so that is the result
+;;;;   (list (file-namestring paname))) ; results in 'help', and that then gets appended to (:ABSOLUTE "foo" "bar")
+;;;;                                    ; to yield (:ABSOLUTE "foo" "bar" "help"), this is then the final directory
